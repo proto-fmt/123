@@ -32,14 +32,21 @@ BOOT_SIZE_MB=512
 SWAP_SIZE_MB=$((SWAP_SIZE * 1024))
 ROOT_SIZE_MB=$((ROOT_SIZE * 1024))
 
+### Color Constants ###
+COLOR_RESET="\e[0m"
+COLOR_GREEN="\e[1;32m"
+COLOR_RED="\e[1;31m"
+COLOR_BLUE="\e[1;34m"
+COLOR_YELLOW="\e[1;33m"
+
 # Function to print colored messages
 print_message() {
-    echo -e "\e[1;32m$1\e[0m"
+    echo -e "${COLOR_GREEN}$1${COLOR_RESET}"
 }
 
 # Function to print error messages
 print_error() {
-    echo -e "\e[1;31m$1\e[0m"
+    echo -e "${COLOR_RED}$1${COLOR_RESET}"
 }
 
 # Function to execute a command and display status
@@ -49,9 +56,10 @@ execute_with_status() {
     echo -n "$description... "
     $command &>/dev/null
     if [[ $? -eq 0 ]]; then
-        echo -e "\e[1;32m[OK]\e[0m"
+        echo -e "${COLOR_GREEN}[OK]${COLOR_RESET}"
     else
-        echo -e "\e[1;31m[FAIL]\e[0m"
+        echo -e "${COLOR_RED}[FAIL]${COLOR_RESET}"
+        print_error "Error: Failed to execute '$command'"
         exit 1
     fi
 }
@@ -101,18 +109,18 @@ validate_inputs() {
 # Confirm settings with the user
 confirm_settings() {
     print_message "=== Installation Settings ==="
-    echo -e "Disk: \e[1;34m$DISK\e[0m"
-    echo -e "Boot partition size: \e[1;34m512 MiB (fixed)\e[0m"
-    echo -e "Swap partition size: \e[1;34m$SWAP_SIZE GB\e[0m"
-    echo -e "Root partition size: \e[1;34m$ROOT_SIZE GB\e[0m"
-    echo -e "Remaining space will be used for \e[1;34m/home\e[0m."
-    echo -e "Timezone: \e[1;34m$TIMEZONE\e[0m"
-    echo -e "Locale: \e[1;34m$LOCALE\e[0m"
-    echo -e "Keymap: \e[1;34m$KEYMAP\e[0m"
-    echo -e "Hostname: \e[1;34m$HOSTNAME\e[0m"
-    echo -e "Root password: \e[1;34m$ROOT_PASSWORD\e[0m"
-    echo -e "Username: \e[1;34m$USERNAME\e[0m"
-    echo -e "User password: \e[1;34m$USER_PASSWORD\e[0m"
+    echo -e "Disk: ${COLOR_BLUE}$DISK${COLOR_RESET}"
+    echo -e "Boot partition size: ${COLOR_BLUE}512 MiB (fixed)${COLOR_RESET}"
+    echo -e "Swap partition size: ${COLOR_BLUE}$SWAP_SIZE GB${COLOR_RESET}"
+    echo -e "Root partition size: ${COLOR_BLUE}$ROOT_SIZE GB${COLOR_RESET}"
+    echo -e "Remaining space will be used for ${COLOR_BLUE}/home${COLOR_RESET}."
+    echo -e "Timezone: ${COLOR_BLUE}$TIMEZONE${COLOR_RESET}"
+    echo -e "Locale: ${COLOR_BLUE}$LOCALE${COLOR_RESET}"
+    echo -e "Keymap: ${COLOR_BLUE}$KEYMAP${COLOR_RESET}"
+    echo -e "Hostname: ${COLOR_BLUE}$HOSTNAME${COLOR_RESET}"
+    echo -e "Root password: ${COLOR_BLUE}$ROOT_PASSWORD${COLOR_RESET}"
+    echo -e "Username: ${COLOR_BLUE}$USERNAME${COLOR_RESET}"
+    echo -e "User password: ${COLOR_BLUE}$USER_PASSWORD${COLOR_RESET}"
     echo -e "================================="
 
     read -p "Continue with these settings? (y/n): " CONFIRM
